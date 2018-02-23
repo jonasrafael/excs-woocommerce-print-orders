@@ -810,7 +810,8 @@ class Excs_Print_Orders {
             <!-- remetente -->
             <table class="invoice-sender" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td colspan="2"><strong>REMETENTE:</strong> <?php echo $this->store_info['blogname']; ?></td>
+                    <!-- Tornar Dinâmico -->
+                    <td colspan="2"><strong>REMETENTE:</strong> *** Nome Dinâmico *** </td>
                 </tr>
                 <tr>
                     <td colspan="2"><strong>CPF/CNPJ:</strong> <?php echo $this->store_info['woocommerce_store_cpf_cnpj']; ?></td>
@@ -850,7 +851,7 @@ class Excs_Print_Orders {
                     <td class="label">PESO</td>
                 </tr>
                 <tr>
-                    <td><?php echo $product_title; ?></td>
+                    <td><?php echo $product_title; ?> <!-- Não está vindo o título do Produto -->  </td>
                     <td><?php echo $quantity_total; ?></td>
                     <td>&nbsp;</td>
                 </tr>
@@ -1351,6 +1352,50 @@ class Excs_Print_Orders {
         </style>
         <?php
     }
+}
+
+add_filter( 'woocommerce_general_settings', 'asbaratas_woocommerce_general_settings' );
+function asbaratas_woocommerce_general_settings( $settings ){
+    
+    $return = array();
+    foreach( $settings as $i => $s ){
+        $return[] = $s;
+        if( $s['id'] == 'woocommerce_store_postcode' ){
+            $return[] = array(
+                'title'    => 'CPF/CNPJ',
+                'desc'     => 'CPF da pessoa física responsável ou CNPJ da loja.',
+                'id'       => 'woocommerce_store_cpf_cnpj',
+                'default'  => '',
+                'type'     => 'text',
+                'desc_tip' => true,
+            );
+        }
+    }
+    
+    return $return;
+}
+
+// Arrumar esse Codigo pra deixar o remetente editavel
+
+add_filter( 'woocommerce_general_settings', 'asbaratas2_woocommerce_general_settings' );
+function asbaratas2_woocommerce_general_settings( $settings ){
+    
+    $return = array();
+    foreach( $settings as $i => $s ){
+        $return[] = $s;
+        if( $s['id'] == 'woocommerce_store_postcode' ){
+            $return[] = array(
+                'title'    => 'correiosremetente',
+                'desc'     => 'Remetente pessoa física responsável ou CNPJ da loja.',
+                'id'       => 'woocommerce_store_correiosremetente',
+                'default'  => '',
+                'type'     => 'text',
+                'desc_tip' => true,
+            );
+        }
+    }
+    
+    return $return;
 }
 
 
